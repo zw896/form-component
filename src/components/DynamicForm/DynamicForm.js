@@ -32,6 +32,15 @@ export default class DynamicForm extends Component {
     });
   };
 
+  handleSelectChange = (event, id) => {
+    this.setState({
+      data: {
+        ...this.state.data,
+        [id]: event.value
+      }
+    });
+  };
+
   onSubmit = event => {
     event.preventDefault();
     console.log(this.state.data);
@@ -75,6 +84,8 @@ export default class DynamicForm extends Component {
                       value={data[v.id]}
                       default={defaultValue}
                       onChange={this.handleChange}
+                      onSelectChange={event =>
+                        this.handleSelectChange(event, v.id)}
                     />
                     
                   </div>

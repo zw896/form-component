@@ -23,6 +23,7 @@ const Input = ( props ) => {
                     defaultValue={props.default}
                     options={props.options}
                     onChange={props.onChange}
+                    onChange={props.onSelectChange}
                     theme={(theme) => ({
                         ...theme,
                         borderRadius: 0,
