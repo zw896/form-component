@@ -17,9 +17,11 @@ export default class DynamicForm extends Component {
       observationName: observationName || null,
       dataElements: dataElements,
       data,
-      valid: false,
       errors: {}
     };
+
+    this.onChange = this.handleChange.bind(this);
+    this.onSelectChange = this.handleSelectChange.bind(this);
   }
 
   handleChange = event => {
@@ -29,6 +31,8 @@ export default class DynamicForm extends Component {
         [event.target.name]: event.target.value
       }
     });
+
+    console.log(this.state.data);
   };
 
   handleSelectChange = (event, id) => {
@@ -51,7 +55,7 @@ export default class DynamicForm extends Component {
         //console.log(data[dataElement.id]);
         let regexName = /^([a-zA-Z]+\s){1}[a-zA-Z]+$/;
         if (!data[dataElement.id].match(regexName)) {
-          errorMessgage[dataElement.id] = "Name shuold be text based and separated by a space.";
+          errorMessgage[dataElement.id] = "Name should be text based and separated by a space.";
         }
       }
       // Validate height and weight
@@ -63,19 +67,40 @@ export default class DynamicForm extends Component {
         ) {
           errorMessgage[dataElement.id] = `${
             dataElement.id
-          } shuold be numbers and less than ${dataElement.bounds.upperLimit}`;
+          } should be numbers and less than ${dataElement.bounds.upperLimit}`;
         }
+      }
+
+      if (dataElement.id === 'bmi') {
+        let dataObj = data;
+        // ! BMI formula: weight / height(m) squared
+        dataObj.bmi = dataObj.weight / Math.pow(dataObj.height / 100, 2);
       }
     });
 
-    let dataObj = data;
-    // ! BMI formula: weight / height(m) squared
-    dataObj.bmi = dataObj.weight / Math.pow(dataObj.height / 100, 2);
     this.setState({
       errors: errorMessgage
     });
     return Object.keys(errorMessgage).length === 0;
   };
+
+  switchForm = (formId) => {
+    const formName = formId === 'bmi' ?  headCircumferenceReferenceProps : bmiReferenceProps;
+    const { id, dataElements, observationName } = formName;
+    // Object that would be finally outputted
+    const data = dataElements
+      .map(vals => vals.id)
+      .reduce((obj, key) => ({ ...obj, [key]: "" }), {});
+
+    this.setState({
+      isLoading: true,
+      id: id || null,
+      observationName: observationName || null,
+      dataElements: dataElements,
+      data,
+      errors: {}
+    });
+  }
 
   onSubmit = event => {
     event.preventDefault();
@@ -86,14 +111,18 @@ export default class DynamicForm extends Component {
   };
 
   render() {
-    const { dataElements, data, observationName, errors } = this.state;
+    const { id, observationName, dataElements, data, errors } = this.state;
     let selectedOption,
       defaultValue = "";
 
     return (
-      <div className="form">
+      <div className="container">
+        <div className="form-switch">
+          <button className="switch" onClick={() => this.switchForm(`${id}`)}>switch</button>
+        </div>
         <form className="form-field" onSubmit={this.onSubmit}>
           <h1 id="message">{observationName}</h1>
+          
           {dataElements.map(dataElement => {
             if (dataElement.display) {
               if (dataElement.type === "select") {

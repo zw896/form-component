@@ -20,11 +20,13 @@ body {
 
 form {
   display: flex;
+  text-align: center;
   flex-direction: column;
   background: transparent;
   max-width: 320px;
   padding: 2rem 2rem 5rem 2rem;
-  position: relative;
+  position: absolute;
+  top: 100px;
 }
 form::before, form::after {
   position: absolute;
@@ -140,7 +142,7 @@ form .submit {
 form button:hover {
   border: 5px solid #090c9b;
 }
-form .switch {
+.switch {
   border: none;
   padding: 0.85rem 1rem;
   margin-top: 2rem;
@@ -148,12 +150,13 @@ form .switch {
   color: white;
   font-size: 0.75rem;
   text-transform: uppercase;
-  width: 65%;
   position: absolute;
-  top: -60px;
-  right: 18%;
+  top: 0px;
   letter-spacing: 0.15em;
   transition: all 0.3s ease;
+}
+.switch:hover {
+  border: 5px solid #090c9b;
 }
 form p {
   font-size: 0.75rem;

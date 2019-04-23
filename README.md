@@ -28,5 +28,5 @@ code challenge
 - [x] Output the final object to console 
 - [x] Validate user input
 - [x] Error message
-- [ ] Switch form button
+- [x] Switch form button
 - [x] Calculate bmi value
