@@ -58,17 +58,22 @@ export default class DynamicForm extends Component {
       // Validate height and weight
       if (dataElement.bounds && dataElement.id !== "bmi") {
         let regexNum = /[0-9]\S+$/;
-        if (!data[dataElement.id].match(regexNum) || data[dataElement.id] > dataElement.bounds.upperLimit) {
-          errorMessgage[dataElement.id] = `${dataElement.id} shuold be numbers and less than ${dataElement.bounds.upperLimit}`;
+        if (
+          !data[dataElement.id].match(regexNum) ||
+          data[dataElement.id] > dataElement.bounds.upperLimit
+        ) {
+          errorMessgage[dataElement.id] = `${
+            dataElement.id
+          } shuold be numbers and less than ${dataElement.bounds.upperLimit}`;
         }
       }
     });
 
     let dataObj = data;
     // ! BMI formula: weight / height(m) squared
-    dataObj.bmi = dataObj.weight / Math.pow(dataObj.height / 100, 2)
+    dataObj.bmi = dataObj.weight / Math.pow(dataObj.height / 100, 2);
     this.setState({
-        errors: errorMessgage
+      errors: errorMessgage
     });
     return Object.keys(errorMessgage).length === 0;
   };
@@ -85,49 +90,52 @@ export default class DynamicForm extends Component {
     const { dataElements, data, observationName, errors } = this.state;
     let selectedOption,
       defaultValue = "";
-    let title = this.props.title || "Form";
-
+      
     return (
       <div className="form">
         <form className="form-field" onSubmit={this.onSubmit}>
           <h1 id="message">{observationName}</h1>
-          {dataElements.map(
-            // dataElements
-            v => {
-              if (v.display) {
-                if (v.type == "select") {
-                  selectedOption = v.options.map(opt => {
+          {dataElements.map(dataElement => {
+            if (dataElement.display) {
+              if (dataElement.type === "select") {
+                selectedOption = dataElement.options.map(opt =>
+                {
                     if (opt.isDefault) defaultValue = opt.name;
                     return {
-                      value: opt.id,
-                      label: opt.name
+                        value: opt.id,
+                        label: opt.name
                     };
-                  });
-                }
-
-                return (
-                  <div className="form-input" key={v.id}>
-                    <h3>{`${v.displayName} ${
-                      v.unitOfMeasure ? ` (${v.unitOfMeasure})` : ""
-                    }`}</h3>
-                    <Input
-                      type={v.type}
-                      name={v.id}
-                      bounds={v.bounds}
-                      options={selectedOption}
-                      placeholder={v.displayName}
-                      value={data[v.id]}
-                      default={defaultValue}
-                      onChange={this.handleChange}
-                      onSelectChange={event =>
-                        this.handleSelectChange(event, v.id)}
-                    />
-                    <div className="error">{errors[v.id]}</div>
-                  </div>
-                );
+                });
               }
+              return (
+                <div className="form-input" key={dataElement.id}>
+                  <h3>{`${dataElement.displayName} ${
+                    dataElement.unitOfMeasure
+                      ? ` (${dataElement.unitOfMeasure})`
+                      : ""
+                  }`}</h3>
+                  <Input
+                    type={dataElement.type}
+                    name={dataElement.id}
+                    bounds={dataElement.bounds}
+                    options={selectedOption}
+                    placeholder={dataElement.displayName}
+                    value={data[dataElement.id]}
+                    default={defaultValue}
+                    onChange={this.handleChange}
+                    onSelectChange={event =>
+                      this.handleSelectChange(event, dataElement.id)
+                    }
+                  />
+                  <div className="error">{errors[dataElement.id]}</div>
+                </div>
+              );
             }
-          )}
+            else
+              return null;
+          })
+        }
+
           <div className="form-group">
             <button className="submit" type="submit">
               submit

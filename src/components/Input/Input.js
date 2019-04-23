@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Select from 'react-select';
 
 const Input = ( props ) => {
@@ -6,7 +6,6 @@ const Input = ( props ) => {
 
     switch ( props.type ) {
         case ('textInput'):
-            
         case ('numberInput'):
             inputType = <input 
                 className={props.type} 
@@ -22,7 +21,6 @@ const Input = ( props ) => {
                     className={props.type}
                     defaultValue={props.default}
                     options={props.options}
-                    onChange={props.onChange}
                     onChange={props.onSelectChange}
                     theme={(theme) => ({
                         ...theme,
