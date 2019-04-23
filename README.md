@@ -1,4 +1,6 @@
 code challenge
+deployed to github pages: https://zw896.github.io/form-component/
+
 ## Idea & Problems
 - JSON data is a nested array, result should be an object.
 - Store the **id** value in **dataElements** into an new object as the key with "" empty value, so it should be 
