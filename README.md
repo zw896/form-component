@@ -29,4 +29,4 @@ code challenge
 - [x] Validate user input
 - [x] Error message
 - [ ] Switch form button
-- [ ] Caculate bmi value
+- [x] Calculate bmi value

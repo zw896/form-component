@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { bmiReferenceProps, headCircumferenceReferenceProps } from "./JsonData";
 import Input from "../Input/Input";
 import "./DynamicForm.css";
-
 export default class DynamicForm extends Component {
   constructor(props) {
     super(props);
@@ -90,7 +89,7 @@ export default class DynamicForm extends Component {
     const { dataElements, data, observationName, errors } = this.state;
     let selectedOption,
       defaultValue = "";
-      
+
     return (
       <div className="form">
         <form className="form-field" onSubmit={this.onSubmit}>
