@@ -124,7 +124,7 @@ export default class DynamicForm extends Component {
                       onSelectChange={event =>
                         this.handleSelectChange(event, v.id)}
                     />
-                    
+                    <div className="error">{errors[v.id]}</div>
                   </div>
                 );
               }
