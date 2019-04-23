@@ -41,9 +41,46 @@ export default class DynamicForm extends Component {
     });
   };
 
+  validateForm = data => {
+    const errorMessgage = {};
+    this.state.dataElements.forEach(dataElement => {
+      // If the input value is empty
+      if (dataElement.isRequired && !data[dataElement.id])
+        errorMessgage[dataElement.id] = `${dataElement.displayName} can't be blank.`;
+      // Validate name
+      if (dataElement.id === "name" && data[dataElement.id]) {
+        //console.log(data[dataElement.id]);
+        let regexName = /^([a-zA-Z]+\s){1}[a-zA-Z]+$/;
+        if (!data[dataElement.id].match(regexName)) {
+          errorMessgage[dataElement.id] = "Name shuold be text based and separated by a space.";
+        }
+      }
+      // Validate height and weight
+      if (dataElement.bounds && dataElement.id !== "bmi") {
+        let regexNum = /[0-9]\S+$/;
+        if (!data[dataElement.id].match(regexNum) || data[dataElement.id] > dataElement.bounds.upperLimit) {
+          errorMessgage[dataElement.id] = `${dataElement.id} shuold be numbers and less than ${dataElement.bounds.upperLimit}`;
+        }
+      }
+    });
+
+    let dataObj = {...data};
+    //! BMI formula: weight / height(m) squared
+    dataObj.bmi = dataObj.weight / Math.pow(dataObj.height / 100, 2)
+    this.setState({
+        errors: errorMessgage,
+        data: dataObj
+    });
+    console.log(errorMessgage);
+    return Object.keys(errorMessgage).length === 0;
+  };
+
   onSubmit = event => {
     event.preventDefault();
-    console.log(this.state.data);
+    const isValid = this.validateForm(this.state.data);
+    if (isValid) {
+      console.log(this.state.data);
+    }
   };
 
   render() {
