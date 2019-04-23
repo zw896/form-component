@@ -64,14 +64,12 @@ export default class DynamicForm extends Component {
       }
     });
 
-    let dataObj = {...data};
-    //! BMI formula: weight / height(m) squared
+    let dataObj = data;
+    // ! BMI formula: weight / height(m) squared
     dataObj.bmi = dataObj.weight / Math.pow(dataObj.height / 100, 2)
     this.setState({
-        errors: errorMessgage,
-        data: dataObj
+        errors: errorMessgage
     });
-    console.log(errorMessgage);
     return Object.keys(errorMessgage).length === 0;
   };
 
